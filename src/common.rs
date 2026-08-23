@@ -1080,7 +1080,8 @@ fn get_api_server_(api: String, custom: String) -> String {
             return format!("http://{}", s);
         }
     }
-    "https://admin.rustdesk.com".to_owned()
+    // "https://admin.rustdesk.com".to_owned();
+    option_env!("API_SERVER").unwrap_or("http://111.228.4.19:9000").to_owned()
 }
 
 #[inline]
