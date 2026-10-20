@@ -131,6 +131,14 @@ sed -i '/static ThemeData darkTheme = ThemeData(/,/scrollbarTheme: scrollbarThem
 sed -i 's/extended_text: 14.0.0/extended_text: 15.0.2/' flutter/pubspec.yaml
 sed -i 's/google_fonts: \^6.2.1/google_fonts: ^8.1.0/' flutter/pubspec.yaml
 
+# Legacy tag compatibility:
+# Some older tag snapshots still reference hbb_common::config::LINK_HEADLESS_LINUX_SUPPORT
+# from src/client.rs, but newer hbb_common submodule revisions removed that export.
+if [[ -f src/client.rs && -r src/client.rs ]]; then
+  sed -i 's/use config::LINK_HEADLESS_LINUX_SUPPORT;//g' src/client.rs
+  sed -i 's/link: LINK_HEADLESS_LINUX_SUPPORT,/link: "https:\/\/rustdesk.com\/docs\/en\/manual\/linux\/headless\/",/g' src/client.rs
+fi
+
 # Fail loudly if any expected substitution did not produce the complete state.
 if ! is_complete_patch_state; then
   echo "Flutter 3.44 source patches did not produce the expected state." >&2
